@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import ReduxToastr from 'react-redux-toastr';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Sidebar } from 'semantic-ui-react';
-import { withRouter } from 'react-router';
+import React, { Component } from "react";
+import ReduxToastr from "react-redux-toastr";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Sidebar } from "semantic-ui-react";
+import { withRouter } from "react-router";
 
-import { isMenuVisible } from './components/NavBar/reducer';
-import { closeMenu } from './components/NavBar/actions';
-import NavBar from './components/NavBar';
-import SideMenu from './views/SideMenu';
+import { isMenuVisible } from "./components/NavBar/reducer";
+import { closeMenu } from "./components/NavBar/actions";
+import NavBar from "./components/NavBar";
+import SideMenu from "./views/SideMenu";
 
-import './App.css';
+import "./App.css";
 
 class App extends Component {
   constructor(props) {
@@ -37,8 +37,14 @@ class App extends Component {
           transitionOut="fadeOut"
         />
         <Sidebar.Pushable>
-          <SideMenu isVisible={this.props.sideMenuVisible} closeMenu={this.props.closeMenu} />
-          <Sidebar.Pusher dimmed={this.props.sideMenuVisible} onClick={this.hideSidebar}>
+          <SideMenu
+            isVisible={this.props.sideMenuVisible}
+            closeMenu={this.props.closeMenu}
+          />
+          <Sidebar.Pusher
+            dimmed={this.props.sideMenuVisible}
+            onClick={this.hideSidebar}
+          >
             <NavBar />
             {this.props.children}
           </Sidebar.Pusher>
@@ -51,20 +57,18 @@ class App extends Component {
 App.propTypes = {
   sideMenuVisible: PropTypes.bool.isRequired,
   closeMenu: PropTypes.func.isRequired,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ])
 };
 
 App.defaultProps = {
-  children: null,
+  children: null
 };
 
 const mapStateToProps = state => ({
-  sideMenuVisible: isMenuVisible(state.navbar),
+  sideMenuVisible: isMenuVisible(state.navbar)
 });
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    { closeMenu },
-  )(App),
-);
+export default withRouter(connect(mapStateToProps, { closeMenu })(App));

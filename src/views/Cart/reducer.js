@@ -1,7 +1,7 @@
-import { combineReducers } from 'redux';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
-import { ADD_PRODUCT, SET_QUANTITY, REMOVE_PRODUCT } from './actions';
+import { combineReducers } from "redux";
+import PropTypes from "prop-types";
+import _ from "lodash";
+import { ADD_PRODUCT, SET_QUANTITY, REMOVE_PRODUCT } from "./actions";
 
 export const cartProductPropType = PropTypes.shape({
   id: PropTypes.number.isRequired,
@@ -11,7 +11,7 @@ export const cartProductPropType = PropTypes.shape({
   price: PropTypes.string.isRequired,
   variationId: PropTypes.number,
   selections: PropTypes.object,
-  dateAdded: PropTypes.string.isRequired,
+  dateAdded: PropTypes.string.isRequired
 });
 
 const items = (state = [], action) => {
@@ -19,7 +19,10 @@ const items = (state = [], action) => {
     case ADD_PRODUCT: {
       let product = null;
       if (!_.isNil(action.variationId)) {
-        product = _.find(state, { id: action.id, variationId: Number(action.variationId) });
+        product = _.find(state, {
+          id: action.id,
+          variationId: Number(action.variationId)
+        });
       } else {
         product = _.find(state, { id: action.id });
       }
@@ -32,45 +35,53 @@ const items = (state = [], action) => {
         const now = new Date();
         newProduct = {
           id: action.id,
-          price: action.price,
+          price: Number(action.price * 1000),
           name: action.name,
           image: action.image,
           quantity: 1,
-          dateAdded: now.toString(),
+          dateAdded: now.toString()
         };
-
-        if (!_.isNil(action.variationId)) {
-          newProduct.variationId = Number(action.variationId);
-          newProduct.selections = action.selections;
-        }
       }
 
-      return _.unionBy(state, [newProduct], !_.isNil(action.variationId) ? 'variationId' : 'id');
+      return _.unionBy(
+        state,
+        [newProduct],
+        !_.isNil(action.variationId) ? "variationId" : "id"
+      );
     }
     case REMOVE_PRODUCT:
       if (!_.isNil(action.variationId)) {
-        return state.filter(item => item.variationId !== Number(action.variationId));
+        return state.filter(
+          item => item.variationId !== Number(action.variationId)
+        );
       }
       return state.filter(item => item.id !== action.id);
 
     case SET_QUANTITY: {
       let product = null;
       if (!_.isNil(action.variationId)) {
-        product = _.find(state, { id: action.id, variationId: Number(action.variationId) });
+        product = _.find(state, {
+          id: action.id,
+          variationId: Number(action.variationId)
+        });
       } else {
         product = _.find(state, { id: action.id });
       }
 
       if (!_.isNil(product)) {
         const newProduct = Object.assign({}, product, {
-          quantity: action.quantity,
+          quantity: action.quantity
         });
 
         // Overwrite product with new details
-        const cartProducts = _.unionBy([newProduct], state, !_.isNil(action.variationId) ? 'variationId' : 'id');
+        const cartProducts = _.unionBy(
+          [newProduct],
+          state,
+          !_.isNil(action.variationId) ? "variationId" : "id"
+        );
 
         // Order cart products by their added date
-        return _.orderBy(cartProducts, ['dateAdded'], ['asc']);
+        return _.orderBy(cartProducts, ["dateAdded"], ["asc"]);
       }
 
       return state;
@@ -83,5 +94,5 @@ const items = (state = [], action) => {
 export const getCart = state => state.items;
 
 export default combineReducers({
-  items,
+  items
 });

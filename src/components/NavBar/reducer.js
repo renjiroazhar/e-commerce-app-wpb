@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux';
-import * as types from './actions';
+import { combineReducers } from "redux";
+import * as types from "./actions";
 
 const sideMenu = (state = false, action) => {
   switch (action.type) {

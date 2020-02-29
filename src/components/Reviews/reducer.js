@@ -1,14 +1,14 @@
-import { combineReducers } from 'redux';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
-import { REQUEST_REVIEWS, RECEIVE_REVIEWS } from './actions';
+import { combineReducers } from "redux";
+import PropTypes from "prop-types";
+import _ from "lodash";
+import { REQUEST_REVIEWS, RECEIVE_REVIEWS } from "./actions";
 
 export const reviewPropType = PropTypes.shape({
   id: PropTypes.number.isRequired,
   rating: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   review: PropTypes.string.isRequired,
-  product: PropTypes.number.isRequired,
+  product: PropTypes.number.isRequired
 });
 
 const items = (state = [], action) => {
@@ -18,8 +18,9 @@ const items = (state = [], action) => {
     case RECEIVE_REVIEWS:
       if (action.reviews.length > 0) {
         const reviews = action.reviews.map(obj =>
-          Object.assign(obj, { product: action.productId }));
-        return _.unionBy(reviews, state, 'id');
+          Object.assign(obj, { product: action.productId })
+        );
+        return _.unionBy(reviews, state, "id");
       }
       return state;
     default:
@@ -38,10 +39,11 @@ const isFetching = (state = 0, action) => {
   }
 };
 
-export const getReviews = (state, productId) => state.items.filter(obj => obj.product === productId);
+export const getReviews = (state, productId) =>
+  state.items.filter(obj => obj.product === productId);
 export const getReviewsFetching = state => state.isFetching;
 
 export default combineReducers({
   items,
-  isFetching,
+  isFetching
 });

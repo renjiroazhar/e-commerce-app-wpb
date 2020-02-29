@@ -1,7 +1,11 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { FacebookShareButton, GooglePlusShareButton, TwitterShareButton } from 'react-share';
-import { Header, Card, Icon, Grid } from 'semantic-ui-react';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import {
+  FacebookShareButton,
+  GooglePlusShareButton,
+  TwitterShareButton
+} from "react-share";
+import { Header, Card, Icon, Grid } from "semantic-ui-react";
 
 class SocialBox extends Component {
   render() {
@@ -14,8 +18,11 @@ class SocialBox extends Component {
           <Grid doubling centered>
             <Grid.Row>
               <Grid.Column width={4}>
-                <FacebookShareButton className="no-outline" url={this.props.permalink}>
-                  <Icon name="facebook f" color="purple" size="big" />
+                <FacebookShareButton
+                  className="no-outline"
+                  url={this.props.permalink}
+                >
+                  <Icon name="facebook f" color="green" size="big" />
                 </FacebookShareButton>
               </Grid.Column>
               <Grid.Column width={4}>
@@ -23,12 +30,15 @@ class SocialBox extends Component {
                   className="no-outline"
                   url={this.props.permalink}
                 >
-                  <Icon name="google plus" color="purple" size="big" />
+                  <Icon name="google plus" color="green" size="big" />
                 </GooglePlusShareButton>
               </Grid.Column>
               <Grid.Column width={4}>
-                <TwitterShareButton className="no-outline" url={this.props.permalink}>
-                  <Icon name="twitter" color="purple" size="big" />
+                <TwitterShareButton
+                  className="no-outline"
+                  url={this.props.permalink}
+                >
+                  <Icon name="twitter" color="green" size="big" />
                 </TwitterShareButton>
               </Grid.Column>
             </Grid.Row>
@@ -40,7 +50,7 @@ class SocialBox extends Component {
 }
 
 SocialBox.propTypes = {
-  permalink: PropTypes.string.isRequired,
+  permalink: PropTypes.string.isRequired
 };
 
 export default SocialBox;

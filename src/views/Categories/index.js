@@ -1,16 +1,21 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Header, Loader, Container } from 'semantic-ui-react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import _ from 'lodash';
+import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Header, Loader, Container } from "semantic-ui-react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import _ from "lodash";
 
-import { fetchCategories } from './actions';
-import { getCategories, getCategoriesFetching, categoryPropType, getCategoriesHasMore } from './reducer';
-import CategoriesList from './CategoriesList';
-import { closeSearch } from '../../components/NavBar/actions';
-import { isSearchVisible } from '../../components/NavBar/reducer';
+import { fetchCategories } from "./actions";
+import {
+  getCategories,
+  getCategoriesFetching,
+  categoryPropType,
+  getCategoriesHasMore
+} from "./reducer";
+import CategoriesList from "./CategoriesList";
+import { closeSearch } from "../../components/NavBar/actions";
+import { isSearchVisible } from "../../components/NavBar/reducer";
 
 class Categories extends Component {
   constructor(props) {
@@ -58,7 +63,7 @@ class Categories extends Component {
       );
     }
 
-    const items = _.orderBy(categories, ['name'], ['asc']);
+    const items = _.orderBy(categories, ["name"], ["asc"]);
 
     return (
       <div>
@@ -81,24 +86,21 @@ Categories.propTypes = {
   categories: PropTypes.arrayOf(categoryPropType).isRequired,
   hasMore: PropTypes.bool.isRequired,
   searchVisible: PropTypes.bool.isRequired,
-  closeSearch: PropTypes.func.isRequired,
+  closeSearch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   loading: getCategoriesFetching(state.categories),
   categories: getCategories(state.categories),
   hasMore: getCategoriesHasMore(state.categories),
-  searchVisible: isSearchVisible(state.navbar),
+  searchVisible: isSearchVisible(state.navbar)
 });
 
 function mapDispatchToProps(dispatch) {
   return Object.assign(
     { dispatch },
-    bindActionCreators({ fetchCategories, closeSearch }, dispatch),
+    bindActionCreators({ fetchCategories, closeSearch }, dispatch)
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Categories);
+export default connect(mapStateToProps, mapDispatchToProps)(Categories);

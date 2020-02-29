@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Loader, Container, Header } from 'semantic-ui-react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import _ from 'lodash';
+import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Loader, Container, Header } from "semantic-ui-react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import _ from "lodash";
 
-import { productPropType } from '../Products/reducer';
-import { fetchProducts, resetSearchProducts } from './actions';
-import { getSearchProductsFetching, getSearchProducts } from './reducer';
-import ProductsList from '../../components/ProductsList';
+import { productPropType } from "../Products/reducer";
+import { fetchProducts, resetSearchProducts } from "./actions";
+import { getSearchProductsFetching, getSearchProducts } from "./reducer";
+import ProductsList from "../../components/ProductsList";
 
-import { closeSearch } from '../../components/NavBar/actions';
-import { isSearchVisible } from '../../components/NavBar/reducer';
+import { closeSearch } from "../../components/NavBar/actions";
+import { isSearchVisible } from "../../components/NavBar/reducer";
 
 class Search extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Search extends Component {
 
     this.state = {
       page: 1,
-      hasMore: false,
+      hasMore: false
     };
 
     this.readProducts = this.readProducts.bind(this);
@@ -42,6 +42,7 @@ class Search extends Component {
     }
 
     if (prevProps.products.length < this.props.products.length) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ hasMore: true });
     }
   }
@@ -54,12 +55,14 @@ class Search extends Component {
 
   readProducts(page) {
     const { dispatch } = this.props;
-    dispatch(fetchProducts({
-      search: this.props.match.params.search,
-      page,
-      order: 'asc',
-      orderby: 'title',
-    }));
+    dispatch(
+      fetchProducts({
+        query: this.props.match.params.search,
+        number: 20,
+        tags: "vegetarian",
+        apiKey: "f2c2e8a53e4142c8bd51e59e2286b2a2"
+      })
+    );
     this.setState({ page, hasMore: false });
   }
 
@@ -85,13 +88,15 @@ class Search extends Component {
       }
       return (
         <Container>
-          <Header textAlign="center">Search `{this.props.match.params.search}`</Header>
+          <Header textAlign="center">
+            Search `{this.props.match.params.search}`
+          </Header>
           <p>No products found.</p>
         </Container>
       );
     }
 
-    const items = _.orderBy(products, ['name'], ['asc']);
+    const items = _.orderBy(products, ["name"], ["asc"]);
 
     return (
       <InfiniteScroll
@@ -99,7 +104,11 @@ class Search extends Component {
         next={this.loadMore}
         hasMore={hasMore}
       >
-        <ProductsList products={items} title={`Search '${this.props.match.params.search}'`} />
+        <ProductsList
+          imageSource="https://spoonacular.com/recipeImages/"
+          products={items}
+          title={`Search '${this.props.match.params.search}'`}
+        />
       </InfiniteScroll>
     );
   }
@@ -111,25 +120,28 @@ Search.propTypes = {
   products: PropTypes.arrayOf(productPropType).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      search: PropTypes.string.isRequired,
-    }).isRequired,
+      search: PropTypes.string.isRequired
+    }).isRequired
   }).isRequired,
   searchVisible: PropTypes.bool.isRequired,
   closeSearch: PropTypes.func.isRequired,
-  resetSearchProducts: PropTypes.func.isRequired,
+  resetSearchProducts: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   loading: getSearchProductsFetching(state.search),
   products: getSearchProducts(state.search),
-  searchVisible: isSearchVisible(state.navbar),
+  searchVisible: isSearchVisible(state.navbar)
 });
 
 function mapDispatchToProps(dispatch) {
-  return Object.assign({ dispatch }, bindActionCreators({ fetchProducts, closeSearch, resetSearchProducts }, dispatch));
+  return Object.assign(
+    { dispatch },
+    bindActionCreators(
+      { fetchProducts, closeSearch, resetSearchProducts },
+      dispatch
+    )
+  );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

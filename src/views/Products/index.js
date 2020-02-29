@@ -1,16 +1,21 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import _ from 'lodash';
-import { Loader, Container } from 'semantic-ui-react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import _ from "lodash";
+import { Loader, Container } from "semantic-ui-react";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-import { fetchProducts } from './actions';
-import { getProductsFetching, getProducts, productPropType, getProductsHasMore } from './reducer';
-import ProductsList from '../../components/ProductsList';
-import { closeSearch } from '../../components/NavBar/actions';
-import { isSearchVisible } from '../../components/NavBar/reducer';
+import { fetchProducts } from "./actions";
+import {
+  getProductsFetching,
+  getProducts,
+  productPropType,
+  getProductsHasMore
+} from "./reducer";
+import ProductsList from "../../components/ProductsList";
+import { closeSearch } from "../../components/NavBar/actions";
+import { isSearchVisible } from "../../components/NavBar/reducer";
 
 class Products extends Component {
   constructor(props) {
@@ -35,8 +40,10 @@ class Products extends Component {
   }
 
   getCategoryName(categories) {
-    return categories.find(category =>
-      Number(category.id) === Number(this.props.match.params.categId)).name;
+    return categories.find(
+      category =>
+        Number(category.id) === Number(this.props.match.params.categId)
+    ).name;
   }
 
   loadProducts() {
@@ -49,13 +56,15 @@ class Products extends Component {
 
   readProducts(page) {
     const { dispatch } = this.props;
-    dispatch(fetchProducts({
-      category: this.props.match.params.categId,
-      page,
-      order: 'asc',
-      orderby: 'title',
-      per_page: 20,
-    }));
+    dispatch(
+      fetchProducts({
+        category: this.props.match.params.categId,
+        page,
+        order: "asc",
+        orderby: "title",
+        per_page: 20
+      })
+    );
   }
 
   render() {
@@ -84,7 +93,7 @@ class Products extends Component {
         hasMore={hasMore}
       >
         <ProductsList
-          products={_.orderBy(products, ['name'], ['asc'])}
+          products={_.orderBy(products, ["name"], ["asc"])}
           title={this.getCategoryName(products[0].categories)}
         />
       </InfiniteScroll>
@@ -99,25 +108,25 @@ Products.propTypes = {
   hasMore: PropTypes.bool.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      categId: PropTypes.string.isRequired,
-    }).isRequired,
+      categId: PropTypes.string.isRequired
+    }).isRequired
   }).isRequired,
   searchVisible: PropTypes.bool.isRequired,
-  closeSearch: PropTypes.func.isRequired,
+  closeSearch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, props) => ({
   loading: getProductsFetching(state.products),
   products: getProducts(state.products, props.match.params.categId),
   hasMore: getProductsHasMore(state.products),
-  searchVisible: isSearchVisible(state.navbar),
+  searchVisible: isSearchVisible(state.navbar)
 });
 
 function mapDispatchToProps(dispatch) {
-  return Object.assign({ dispatch }, bindActionCreators({ fetchProducts, closeSearch }, dispatch));
+  return Object.assign(
+    { dispatch },
+    bindActionCreators({ fetchProducts, closeSearch }, dispatch)
+  );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Products);
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

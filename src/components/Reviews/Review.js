@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Rating from '../Rating';
-import './styles.css';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import Rating from "../Rating";
+import "./styles.css";
 
 class Review extends Component {
   render() {
@@ -19,7 +19,7 @@ class Review extends Component {
 Review.propTypes = {
   rating: PropTypes.number.isRequired,
   content: PropTypes.string.isRequired,
-  reviewer: PropTypes.string.isRequired,
+  reviewer: PropTypes.string.isRequired
 };
 
 export default Review;

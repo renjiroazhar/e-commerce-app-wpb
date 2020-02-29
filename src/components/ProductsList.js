@@ -1,25 +1,26 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { Header } from 'semantic-ui-react';
-import ProductCard from './ProductCard';
-import { productPropType } from '../views/Products/reducer';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { Header } from "semantic-ui-react";
+import ProductCard from "./ProductCard";
+import { productPropType } from "../views/Products/reducer";
 
 class ProductsList extends Component {
   render() {
-    const list = this.props.products.map(element => (
+    const { imageSource, products, title } = this.props;
+    const list = products.map(element => (
       <ProductCard
         key={element.id}
         id={element.id}
-        src={element.images[0].src}
-        name={element.name}
-        price={element.price}
-        categories={element.categories}
+        src={imageSource ? imageSource + element.image : element.image}
+        name={element.title}
+        price={Math.round(element.pricePerServing)}
+        diets={element.diets}
       />
     ));
 
     return (
       <div>
-        <Header textAlign="center">{this.props.title}</Header>
+        <Header textAlign="center">{title}</Header>
         {list}
       </div>
     );
@@ -28,7 +29,8 @@ class ProductsList extends Component {
 
 ProductsList.propTypes = {
   products: PropTypes.arrayOf(productPropType).isRequired,
-  title: PropTypes.string.isRequired,
+  imageSource: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 export default ProductsList;

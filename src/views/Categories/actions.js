@@ -1,19 +1,19 @@
-import 'whatwg-fetch';
-import config from '../../config/config';
+import "whatwg-fetch";
+import config from "../../config/config";
 
-export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES';
-export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
+export const REQUEST_CATEGORIES = "REQUEST_CATEGORIES";
+export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES";
 
 export const requestCategories = () => ({
-  type: REQUEST_CATEGORIES,
+  type: REQUEST_CATEGORIES
 });
 
 export const receiveCategories = categories => ({
   type: RECEIVE_CATEGORIES,
-  categories,
+  categories
 });
 
-export const fetchCategories = (params = {}) => (dispatch) => {
+export const fetchCategories = (params = {}) => dispatch => {
   dispatch(requestCategories());
 
   let url;
@@ -22,10 +22,10 @@ export const fetchCategories = (params = {}) => (dispatch) => {
   } else {
     url =
       config.API_CATEGORIES_URL +
-      '?' +
+      "?" +
       Object.keys(params)
-        .map(k => k + '=' + encodeURIComponent(params[k]))
-        .join('&');
+        .map(k => k + "=" + encodeURIComponent(params[k]))
+        .join("&");
   }
   return fetch(url)
     .then(response => response.json())

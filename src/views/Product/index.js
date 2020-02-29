@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
-import { Loader } from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import _ from 'lodash';
+/* eslint-disable react/forbid-prop-types */
+import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import PropTypes from "prop-types";
+import { Loader } from "semantic-ui-react";
+import { connect } from "react-redux";
+import _ from "lodash";
 
-import { fetchProducts } from '../Products/actions';
-import { getProducts, getProductsFetching, productPropType } from '../Products/reducer';
-import ProductDetails from './ProductDetails';
-import { closeSearch } from '../../components/NavBar/actions';
-import { isSearchVisible } from '../../components/NavBar/reducer';
+import { fetchProductDetails } from "./actions";
+import ProductDetails from "./ProductDetails";
+import { closeSearch } from "../../components/NavBar/actions";
+import { isSearchVisible } from "../../components/NavBar/reducer";
 
 class Product extends Component {
   componentDidMount() {
@@ -22,18 +22,22 @@ class Product extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.productId !== prevProps.match.params.productId) {
+    if (
+      this.props.match.params.productId !== prevProps.match.params.productId
+    ) {
       this.readProduct();
     }
   }
 
   readProduct() {
     const { dispatch } = this.props;
-    dispatch(fetchProducts({ id: this.props.match.params.productId }));
+    dispatch(fetchProductDetails(this.props.match.params.productId));
   }
 
   render() {
-    if (this.props.loading === 1) {
+    const { productDetails, loading } = this.props;
+
+    if (loading) {
       return (
         <div>
           <Loader active />
@@ -41,15 +45,11 @@ class Product extends Component {
       );
     }
 
-    const product = this.props.products.find(
-      obj => obj.id === Number(this.props.match.params.productId),
-    );
-
-    if (_.isNil(product)) {
+    if (_.isNull(productDetails.productDetail)) {
       return <p>Product does not exist</p>;
     }
 
-    return <ProductDetails product={product} />;
+    return <ProductDetails productDetails={productDetails.productDetail} />;
   }
 }
 
@@ -58,25 +58,25 @@ Product.propTypes = {
   loading: PropTypes.number.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      productId: PropTypes.string.isRequired,
-    }).isRequired,
+      productId: PropTypes.string.isRequired
+    }).isRequired
   }).isRequired,
-  products: PropTypes.arrayOf(productPropType).isRequired,
   searchVisible: PropTypes.bool.isRequired,
   closeSearch: PropTypes.func.isRequired,
+  productDetails: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  loading: getProductsFetching(state.products),
-  products: getProducts(state.products),
-  searchVisible: isSearchVisible(state.navbar),
+  loading: state.productDetails.loading,
+  productDetails: state.productDetails,
+  searchVisible: isSearchVisible(state.navbar)
 });
 
 function mapDispatchToProps(dispatch) {
-  return Object.assign({ dispatch }, bindActionCreators({ fetchProducts, closeSearch }, dispatch));
+  return Object.assign(
+    { dispatch },
+    bindActionCreators({ fetchProductDetails, closeSearch }, dispatch)
+  );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Product);
+export default connect(mapStateToProps, mapDispatchToProps)(Product);

@@ -1,9 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Sidebar, Menu, Icon, Header } from 'semantic-ui-react';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from "react";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import { Sidebar, Menu, Header } from "semantic-ui-react";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import PersonIcon from "@material-ui/icons/Person";
+import HomeIcon from "@material-ui/icons/Home";
 
-import './styles.css';
+import "./styles.css";
 
 const SideMenu = props => (
   <Sidebar
@@ -15,49 +19,34 @@ const SideMenu = props => (
     icon="labeled"
     vertical
     inverted
-    color="purple"
+    color="green"
   >
     <Header as="h2" inverted>
       MENU
     </Header>
     <Link to="/" onClick={props.closeMenu}>
       <Menu.Item name="home">
-        <Icon name="home" />Home
+        <HomeIcon />
+        <p>Home</p>
       </Menu.Item>
     </Link>
-    <Link to="/categories" onClick={props.closeMenu}>
-      <Menu.Item name="categories">
-        <Icon name="browser" />Categories
-      </Menu.Item>
-    </Link>
+
     <Link to="/cart" onClick={props.closeMenu}>
       <Menu.Item name="ordering">
-        <Icon name="shopping basket" />Shopping Cart
+        <ShoppingCartIcon />
+        <p>Shopping Cart</p>
       </Menu.Item>
     </Link>
-    {/*
-    <Menu.Item name="service">
-      <Icon name="setting" />Customer Service
-    </Menu.Item>
-    <Menu.Item name="shipping">
-      <Icon name="truck" />Shipping
-    </Menu.Item>
-    <Menu.Item name="locations">
-      <Icon name="marker" />Locations
-    </Menu.Item>
-    <Menu.Item name="contact">
-      <Icon name="envelope" />Contact
-    </Menu.Item>
     <Menu.Item name="account">
-      <Icon name="user" />User Account
+      <PersonIcon />
+      <p>Account</p>
     </Menu.Item>
-    */}
   </Sidebar>
 );
 
 SideMenu.propTypes = {
   isVisible: PropTypes.bool.isRequired,
-  closeMenu: PropTypes.func.isRequired,
+  closeMenu: PropTypes.func.isRequired
 };
 
 export default SideMenu;

@@ -1,80 +1,91 @@
-import { createStore, applyMiddleware } from 'redux';
-import { persistCombineReducers, persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-import { reducer as toastr } from 'react-redux-toastr';
-import thunk from 'redux-thunk';
+import { createStore, applyMiddleware } from "redux";
+import {
+  persistCombineReducers,
+  persistReducer,
+  persistStore
+} from "redux-persist";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import { reducer as toastr } from "react-redux-toastr";
+import thunk from "redux-thunk";
 // import logger from 'redux-logger';
-import createHistory from 'history/createBrowserHistory';
-import { routerMiddleware } from 'react-router-redux';
+import createHistory from "history/createBrowserHistory";
+import { routerMiddleware } from "react-router-redux";
 
-import config from './config/config';
-import categories from './views/Categories/reducer';
-import products from './views/Products/reducer';
-import reviews from './components/Reviews/reducer';
-import cart from './views/Cart/reducer';
-import variations from './components/Variations/reducer';
-import search from './views/Search/reducer';
-import navbar from './components/NavBar/reducer';
+import config from "./config/config";
+import categories from "./views/Categories/reducer";
+import products from "./views/Products/reducer";
+import reviews from "./components/Reviews/reducer";
+import cart from "./views/Cart/reducer";
+import variations from "./components/Variations/reducer";
+import search from "./views/Search/reducer";
+import navbar from "./components/NavBar/reducer";
+import productDetailsReducer from "./views/Product/reducer";
 
 const rootPersistConfig = {
-  key: 'root',
+  key: "root",
   storage,
   blacklist: [
-    'navbar',
-    'search',
-    'toastr',
-    'categories',
-    'products',
-    'reviews',
-    'variations',
-    'cart',
-  ],
+    "navbar",
+    "search",
+    "toastr",
+    "categories",
+    "products",
+    "reviews",
+    "variations",
+    "cart",
+    "productDetails"
+  ]
   // debug: true,
 };
 
 const rootReducer = persistCombineReducers(rootPersistConfig, {
   categories: persistReducer(
     {
-      key: 'categories',
+      key: "categories",
       storage,
-      blacklist: config.OFFLINE ? ['isFetching', 'hasMore'] : ['isFetching', 'hasMore', 'items'],
+      blacklist: config.OFFLINE
+        ? ["isFetching", "hasMore"]
+        : ["isFetching", "hasMore", "items"]
     },
-    categories,
+    categories
   ),
   products: persistReducer(
     {
-      key: 'products',
+      key: "products",
       storage,
-      blacklist: config.OFFLINE ? ['isFetching', 'hasMore'] : ['isFetching', 'hasMore', 'items'],
+      blacklist: config.OFFLINE
+        ? ["isFetching", "hasMore"]
+        : ["isFetching", "hasMore", "items"]
     },
-    products,
+    products
   ),
   reviews: persistReducer(
     {
-      key: 'reviews',
+      key: "reviews",
       storage,
-      blacklist: config.OFFLINE ? ['isFetching'] : ['isFetching', 'items'],
+      blacklist: config.OFFLINE ? ["isFetching"] : ["isFetching", "items"]
     },
-    reviews,
+    reviews
   ),
   variations: persistReducer(
     {
-      key: 'variations',
+      key: "variations",
       storage,
-      blacklist: config.OFFLINE ? ['isFetching'] : ['isFetching', 'items'],
+      blacklist: config.OFFLINE ? ["isFetching"] : ["isFetching", "items"]
     },
-    variations,
+    variations
   ),
   cart: persistReducer(
     {
-      key: 'cart',
-      storage,
+      key: "cart",
+      storage
     },
-    cart,
+    cart
   ),
   navbar,
   search,
   toastr,
+  productDetails: productDetailsReducer
 });
 
 const history = createHistory();
@@ -82,7 +93,7 @@ const history = createHistory();
 const store = createStore(
   rootReducer,
   undefined,
-  applyMiddleware(thunk, routerMiddleware(history)),
+  applyMiddleware(thunk, routerMiddleware(history))
 );
 
 persistStore(store);

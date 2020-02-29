@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import _ from 'lodash';
-import PropTypes from 'prop-types';
-import { Card, Grid, Button, Icon, Input } from 'semantic-ui-react';
-import { cartProductPropType } from './reducer';
-import { setQuantity, removeProduct } from './actions';
-import CircularImage from '../../components/CircularImage';
-import config from '../../config/config';
+/* eslint-disable function-paren-newline */
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import _ from "lodash";
+import PropTypes from "prop-types";
+import { Card, Grid, Button, Icon, Input } from "semantic-ui-react";
+import { cartProductPropType } from "./reducer";
+import { setQuantity, removeProduct } from "./actions";
+import CircularImage from "../../components/CircularImage";
 
-import './styles.css';
+import "./styles.css";
 
 class CartProduct extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class CartProduct extends Component {
 
     this.state = {
       quantity: this.props.product.quantity,
-      isExpanded: false,
+      isExpanded: false
     };
 
     this.toggleCardHeight = this.toggleCardHeight.bind(this);
@@ -32,8 +32,8 @@ class CartProduct extends Component {
     }
 
     const description = Object.keys(this.props.product.selections)
-      .map(key => _.startCase(key) + ': ' + this.props.product.selections[key])
-      .join(', ');
+      .map(key => _.startCase(key) + ": " + this.props.product.selections[key])
+      .join(", ");
 
     return (
       <Grid.Row>
@@ -54,7 +54,14 @@ class CartProduct extends Component {
     this.setState({ quantity });
 
     const { dispatch } = this.props;
-    dispatch(setQuantity(this.props.product.id, this.props.product.variationId, quantity));
+    // eslint-disable-next-line function-paren-newline
+    dispatch(
+      setQuantity(
+        this.props.product.id,
+        this.props.product.variationId,
+        quantity
+      )
+    );
   }
 
   /**
@@ -66,12 +73,20 @@ class CartProduct extends Component {
     const quantity = this.state.quantity - 1;
 
     if (quantity === 0) {
-      dispatch(removeProduct(this.props.product.id, this.props.product.variationId));
+      dispatch(
+        removeProduct(this.props.product.id, this.props.product.variationId)
+      );
       return;
     }
 
     this.setState({ quantity });
-    dispatch(setQuantity(this.props.product.id, this.props.product.variationId, quantity));
+    dispatch(
+      setQuantity(
+        this.props.product.id,
+        this.props.product.variationId,
+        quantity
+      )
+    );
   }
 
   /**
@@ -79,7 +94,9 @@ class CartProduct extends Component {
    */
   removeItem() {
     const { dispatch } = this.props;
-    dispatch(removeProduct(this.props.product.id, this.props.product.variationId));
+    dispatch(
+      removeProduct(this.props.product.id, this.props.product.variationId)
+    );
   }
 
   render() {
@@ -89,34 +106,64 @@ class CartProduct extends Component {
           <Grid doubling>
             <Grid.Row centered key={this.props.product.id}>
               <Grid.Column width={4} textAlign="center">
-                <CircularImage src={this.props.product.image} width={50} height={50} />
+                <CircularImage
+                  src={this.props.product.image}
+                  width={50}
+                  height={50}
+                />
               </Grid.Column>
-              <Grid.Column width={4} className="break-words">
+              <Grid.Column
+                width={12}
+                style={{ display: "flex", alignItems: "center" }}
+                className="break-words"
+              >
                 {this.props.product.name}
               </Grid.Column>
-              <Grid.Column width={4}>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      this.state.quantity + ' x ' + config.CURRENCY + this.props.product.price,
-                  }}
-                />
-              </Grid.Column>
-              <Grid.Column width={4} textAlign="right">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: config.CURRENCY + (Math.round(Number(this.props.product.price) * Number(this.state.quantity) * 100) / 100),
-                  }}
-                />
-              </Grid.Column>
               <div className="cart-buttons">
-                <Button icon onClick={this.toggleCardHeight} color="purple">
+                <Button icon onClick={this.toggleCardHeight} color="green">
                   <Icon name="pencil" />
                 </Button>
                 <Button icon className="cart-delete" onClick={this.removeItem}>
                   <Icon name="trash" />
                 </Button>
               </div>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column width={8}>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      this.state.quantity +
+                      " x " +
+                      Number(
+                        Math.round(this.props.product.price)
+                      ).toLocaleString("ID-id", {
+                        currency: "IDR",
+                        style: "currency"
+                      })
+                  }}
+                />
+              </Grid.Column>
+              <Grid.Column
+                style={{ fontWeight: 600 }}
+                width={8}
+                textAlign="right"
+              >
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: Number(
+                      Math.round(
+                        Number(this.props.product.price) *
+                          Number(this.state.quantity) *
+                          100
+                      ) / 100
+                    ).toLocaleString("id-ID", {
+                      style: "currency",
+                      currency: "IDR"
+                    })
+                  }}
+                />
+              </Grid.Column>
             </Grid.Row>
             {this.getProductSelections()}
             {this.state.isExpanded ? (
@@ -125,11 +172,23 @@ class CartProduct extends Component {
                   <p className="cart-quantity-label">&nbsp;Quantity:</p>
                 </Grid.Column>
                 <Grid.Column width={10}>
-                  <Button icon onClick={this.reduceItemQuantity} className="cart-button">
+                  <Button
+                    icon
+                    onClick={this.reduceItemQuantity}
+                    className="cart-button"
+                  >
                     <Icon name="minus" />
                   </Button>
-                  <Input value={this.state.quantity} readOnly className="cart-quantity-input" />
-                  <Button icon onClick={this.increaseItemQuantity} className="cart-button">
+                  <Input
+                    value={this.state.quantity}
+                    readOnly
+                    className="cart-quantity-input"
+                  />
+                  <Button
+                    icon
+                    onClick={this.increaseItemQuantity}
+                    className="cart-button"
+                  >
                     <Icon name="plus" />
                   </Button>
                 </Grid.Column>
@@ -144,11 +203,14 @@ class CartProduct extends Component {
 
 CartProduct.propTypes = {
   product: cartProductPropType.isRequired,
-  dispatch: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
 
 function mapDispatchToProps(dispatch) {
-  return Object.assign({ dispatch }, bindActionCreators({ setQuantity, removeProduct }, dispatch));
+  return Object.assign(
+    { dispatch },
+    bindActionCreators({ setQuantity, removeProduct }, dispatch)
+  );
 }
 
 export default connect(null, mapDispatchToProps)(CartProduct);

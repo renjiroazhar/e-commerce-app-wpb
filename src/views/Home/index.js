@@ -1,16 +1,21 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Loader, Container } from 'semantic-ui-react';
-import _ from 'lodash';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Loader, Container } from "semantic-ui-react";
+import _ from "lodash";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-import { fetchProducts } from '../Products/actions';
-import { getProductsFetching, getProducts, productPropType, getProductsHasMore } from '../Products/reducer';
-import ProductsList from '../../components/ProductsList';
-import { closeSearch } from '../../components/NavBar/actions';
-import { isSearchVisible } from '../../components/NavBar/reducer';
+import { fetchProducts } from "../Products/actions";
+import {
+  getProductsFetching,
+  getProducts,
+  productPropType,
+  getProductsHasMore
+} from "../Products/reducer";
+import ProductsList from "../../components/ProductsList";
+import { closeSearch } from "../../components/NavBar/actions";
+import { isSearchVisible } from "../../components/NavBar/reducer";
 
 class Home extends Component {
   constructor(props) {
@@ -50,18 +55,18 @@ class Home extends Component {
 
   readProducts(page) {
     const { dispatch } = this.props;
-    dispatch(fetchProducts({
-      page,
-      featured: 1,
-      order: 'asc',
-      orderby: 'title',
-      per_page: 20,
-    }));
+    dispatch(
+      fetchProducts({
+        page,
+        number: 20,
+        tags: "vegetarian",
+        apiKey: "f2c2e8a53e4142c8bd51e59e2286b2a2"
+      })
+    );
   }
 
   render() {
     const { loading, products, hasMore } = this.props;
-
     if (loading === 1 && products.length === 0) {
       return (
         <div>
@@ -87,7 +92,10 @@ class Home extends Component {
         next={this.loadProducts}
         hasMore={hasMore}
       >
-        <ProductsList products={_.orderBy(items, ['name'], ['asc'])} title="Home" />
+        <ProductsList
+          products={_.orderBy(items, ["title"], ["asc"])}
+          title="Home"
+        />
       </InfiniteScroll>
     );
   }
@@ -99,21 +107,21 @@ Home.propTypes = {
   products: PropTypes.arrayOf(productPropType).isRequired,
   hasMore: PropTypes.bool.isRequired,
   searchVisible: PropTypes.bool.isRequired,
-  closeSearch: PropTypes.func.isRequired,
+  closeSearch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   loading: getProductsFetching(state.products),
   products: getProducts(state.products),
   hasMore: getProductsHasMore(state.products),
-  searchVisible: isSearchVisible(state.navbar),
+  searchVisible: isSearchVisible(state.navbar)
 });
 
 function mapDispatchToProps(dispatch) {
-  return Object.assign({ dispatch }, bindActionCreators({ fetchProducts, closeSearch }, dispatch));
+  return Object.assign(
+    { dispatch },
+    bindActionCreators({ fetchProducts, closeSearch }, dispatch)
+  );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

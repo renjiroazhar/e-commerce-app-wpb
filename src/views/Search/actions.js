@@ -1,24 +1,24 @@
-import 'whatwg-fetch';
-import config from '../../config/config';
+import "whatwg-fetch";
+import config from "../../config/config";
 
-export const REQUEST_SEARCH_PRODUCTS = 'REQUEST_SEARCH_PRODUCTS';
-export const RECEIVE_SEARCH_PRODUCTS = 'RECEIVE_SEARCH_PRODUCTS';
-export const RESET_SEARCH_PRODUCTS = 'RESET_SEARCH_PRODUCTS';
+export const REQUEST_SEARCH_PRODUCTS = "REQUEST_SEARCH_PRODUCTS";
+export const RECEIVE_SEARCH_PRODUCTS = "RECEIVE_SEARCH_PRODUCTS";
+export const RESET_SEARCH_PRODUCTS = "RESET_SEARCH_PRODUCTS";
 
 export const requestSearchProducts = () => ({
-  type: REQUEST_SEARCH_PRODUCTS,
+  type: REQUEST_SEARCH_PRODUCTS
 });
 
 export const receiveSearchProducts = products => ({
   type: RECEIVE_SEARCH_PRODUCTS,
-  products,
+  products
 });
 
 export const resetSearchProducts = () => ({
-  type: RESET_SEARCH_PRODUCTS,
+  type: RESET_SEARCH_PRODUCTS
 });
 
-export const fetchProducts = (params = {}) => (dispatch) => {
+export const fetchProducts = (params = {}) => dispatch => {
   dispatch(requestSearchProducts());
 
   let url;
@@ -26,17 +26,17 @@ export const fetchProducts = (params = {}) => (dispatch) => {
     url = config.API_PRODUCT_URL + String(params.id);
   } else {
     url =
-      config.API_PRODUCTS_URL +
-      '?' +
+      "https://api.spoonacular.com/recipes/search" +
+      "?" +
       Object.keys(params)
-        .map(k => k + '=' + encodeURIComponent(params[k]))
-        .join('&');
+        .map(k => k + "=" + encodeURIComponent(params[k]))
+        .join("&");
   }
 
   return fetch(url)
     .then(response => response.json())
-    .then((json) => {
-      dispatch(receiveSearchProducts(json));
+    .then(json => {
+      dispatch(receiveSearchProducts(json.results));
     })
     .catch(() => {
       dispatch(receiveSearchProducts([]));

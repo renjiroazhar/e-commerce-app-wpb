@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Segment } from 'semantic-ui-react';
+import React from "react";
+import PropTypes from "prop-types";
+import { Segment } from "semantic-ui-react";
 
-import './styles.css';
+import "./styles.css";
 
 const CircularImage = props => (
   <Segment
@@ -13,7 +13,7 @@ const CircularImage = props => (
     style={{
       backgroundImage: `url(${props.src})`,
       width: props.width,
-      height: props.height,
+      height: props.height
     }}
   />
 );
@@ -21,13 +21,13 @@ const CircularImage = props => (
 CircularImage.propTypes = {
   src: PropTypes.string,
   width: PropTypes.number,
-  height: PropTypes.number,
+  height: PropTypes.number
 };
 
 CircularImage.defaultProps = {
-  src: '',
+  src: "",
   width: 80,
-  height: 80,
+  height: 80
 };
 
 export default CircularImage;
